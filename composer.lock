@@ -1,0 +1,70 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "763afcad022ae6418ec138d64289df77",
+    "packages": [
+        {
+            "name": "gregwar/gnuplot",
+            "version": "v1.0.2",
+            "target-dir": "Gregwar/GnuPlot",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gregwar/GnuPlot.git",
+                "reference": "fe3a1498a9960750a8e826e7f41b7075d8f8fe66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gregwar/GnuPlot/zipball/fe3a1498a9960750a8e826e7f41b7075d8f8fe66",
+                "reference": "fe3a1498a9960750a8e826e7f41b7075d8f8fe66",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Gregwar\\GnuPlot": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "http://www.gregwar.com/"
+                }
+            ],
+            "description": "GnuPlot library",
+            "homepage": "https://github.com/Gregwar/GnuPlot",
+            "keywords": [
+                "gnuplot",
+                "graph",
+                "image",
+                "plot",
+                "png",
+                "stats"
+            ],
+            "support": {
+                "issues": "https://github.com/Gregwar/GnuPlot/issues",
+                "source": "https://github.com/Gregwar/GnuPlot/tree/v1.0.2"
+            },
+            "time": "2022-10-12T15:15:48+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}
