@@ -7,11 +7,13 @@ final class Statistics
     private int $n = 0;
     private float $mean = 0.0;
     private float $M2 = 0.0;
+    private array $data = [];
 
     public function ingest(iterable $data): void
     {
         foreach ($data as $x) {
             $x = (float)$x;
+            $this->data[] = $x;
             $this->n++;
 
             $delta = $x - $this->mean;
@@ -34,4 +36,25 @@ final class Statistics
     {
         return sqrt($this->variance());
     }
+    public function coverage(float $k): float
+    {
+    $mean = $this->mean();
+    $std  = $this->stdDev();
+
+    $count = 0;
+    $total = count($this->data);
+
+    foreach ($this->data as $x) {
+        if (abs($x - $mean) <= $k * $std) {
+            $count++;
+        }
+    }
+
+    return ($count / $total) * 100.0;
+}
+
+public function coefficientOfVariation(): float
+{
+    return ($this->stdDev() / $this->mean()) * 100.0;
+}
 }

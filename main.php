@@ -36,9 +36,6 @@ $tempA = new ScalarFieldSource(
 $stats = new Statistics();
 $stats->ingest($tempA);
 
-echo "Mean temperature: {$stats->mean()} K\n";
-echo "Std dev: {$stats->stdDev()} K\n";
-
 $gaussian = new NormalDistribution(
     $stats->mean(),
     $stats->stdDev()
@@ -49,4 +46,11 @@ $plotter = new GnuPlotBellCurvePlotter(
     bins: 60
 );
 
-$plotter->plot($tempA, $gaussian, 2000, 40000);
+$plotter->plot($tempA, $gaussian, 2000, 20000);
+echo "Mean temperature: {$stats->mean()} K\n";
+echo "Std dev: {$stats->stdDev()} K\n";
+echo "Coverage ±1σ : " . round($stats->coverage(1), 2) . "%\n";
+echo "Coverage ±2σ : " . round($stats->coverage(2), 2) . "%\n";
+echo "Coverage ±3σ : " . round($stats->coverage(3), 2) . "%\n";
+
+echo "Coefficient of Variation: " . round($stats->coefficientOfVariation(), 2) . "%\n";

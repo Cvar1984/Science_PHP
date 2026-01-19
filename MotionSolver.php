@@ -17,65 +17,78 @@ class MotionSolver
         $this->m = $mass;
     }
 
-    public function step(float $dt, $force, float $t)
+    // Semi-implicit Euler (symplectic)
+    public function step(float $dt, float $force)
     {
-        if (is_callable($force)) {
-            $F = $force($t, $this->x, $this->v);
-        } else {
-            $F = $force;
-        }
-
-        // acceleration
-        $a = $F / $this->m;
-
-        // Euler integration
+        $a = $force / $this->m;
         $this->v += $a * $dt;
         $this->x += $this->v * $dt;
     }
 }
 
 // -----------------------------
-// Simulation (gravity)
+// Parameters
 // -----------------------------
 $mass = 1.0;
-$g = 9.81;
+$g    = 9.81;
 
 $sim = new MotionSolver(100, 0, $mass);
-$dt = 0.01;
-$t  = 0;
+$dt  = 0.0001;
+$t   = 0;
 
-// Create GnuPlot instance
+// -----------------------------
+// GnuPlot
+// -----------------------------
 $gp = new GnuPlot();
 
-// Curve 0: position
+// Curve titles
 $gp->setTitle(0, "Position (m)");
-
-// Curve 1: velocity
 $gp->setTitle(1, "Velocity (m/s)");
 
-while ($t <= 5) {
-    // Add points using the low-level API
-    $gp->push($t, $sim->x, 0); // curve 0 -> x(t)
-    $gp->push($t, $sim->v, 1); // curve 1 -> v(t)
+// Initial point
+$gp->push($t, $sim->x, 0);
+$gp->push($t, $sim->v, 1);
 
-    // Step simulation
-    $sim->step($dt, -$mass * $g, $t);
+// -----------------------------
+// Simulation loop (until ground hit)
+// -----------------------------
+while (true) {
+    $xPrev = $sim->x;
+    $vPrev = $sim->v;
+    $tPrev = $t;
 
+    $sim->step($dt, -$mass * $g);
     $t += $dt;
+
+    // Ground impact interpolation
+    if ($sim->x <= 0.0) {
+        $alpha = $xPrev / ($xPrev - $sim->x);
+        $tHit  = $tPrev + $alpha * $dt;
+        $vHit  = $vPrev - $g * ($alpha * $dt);
+
+        $gp->push($tHit, 0.0, 0);
+        $gp->push($tHit, $vHit, 1);
+        break;
+    }
+
+    $gp->push($t, $sim->x, 0);
+    $gp->push($t, $sim->v, 1);
 }
 
+// -----------------------------
 // Graph configuration
-$gp->setGraphTitle("Motion Under Gravity");
+// -----------------------------
+$gp->setGraphTitle("Free Fall Until Ground Impact");
 $gp->setXLabel("Time (s)");
 $gp->setYLabel("Value");
-$gp->setWidth(800);
-$gp->setHeight(600);
+$gp->setWidth(2000);
+$gp->setHeight(800);
 
-// Optional axis ranges
-// $gp->setXRange(0, 5);
-// $gp->setYRange(-60, 100);
+// Optional axis limits
+// $gp->setXRange(0, $t);
+// $gp->setYRange(-50, 110);
 
-// Save to PNG
+// Save PNG
 $gp->writePng("motion.png");
 
 echo "Saved graph to motion.png\n";
